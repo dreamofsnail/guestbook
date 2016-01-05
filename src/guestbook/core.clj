@@ -40,7 +40,8 @@
 (defn migrate [args]
   (ragtime.main/-main
     "-r" "ragtime.sql.database"
-    "-d" "jdbc:h2:~/guestbook_dev.db" ;(env :database-url)
+    "-d" (let [db-spec (env :db-spec)]
+           (str "jdbc:" (:subprotocol db-spec) ":" (:subname db-spec) "?user=" (:user db-spec) "&password=" (:password db-spec)))
     "-m" "ragtime.sql.files/migrations"
     (clojure.string/join args)))
 
